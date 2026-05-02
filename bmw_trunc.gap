@@ -3,12 +3,12 @@ SetInfoLevel(InfoGBNP, 2);
 SetInfoLevel(InfoGBNPTime,2);
 SetRecursionTrapInterval(50000);
 
-# Homogenized version of bmw_example.txt for use with SGrobnerTrunc.
-# We introduce a central degree-1 generator h and replace each constant c
-# in the relations by c*h^k where k is chosen so that every monomial in
-# every relation has the same total degree (with each x_i, y_i, h of weight 1).
-# Then the homogenized algebra A^h satisfies dim (A^h)_d = dim A_{<=d},
-# i.e., HilbertSeriesQA on A^h gives the cumulative Hilbert function of A.
+# Homogenized version of bmw_example for use with SGrobnerTrunc. We introduce
+# a central degree-1 generator h and replace each constant c in the relations
+# by c*h^k where k is chosen so that every monomial in every relation has the
+# same total degree (with each x_i, y_i, h of weight 1). Then the homogenized
+# algebra A^h satisfies dim (A^h)_d = dim A_{<=d}, i.e., HilbertSeriesQA on
+# A^h gives the cumulative Betti numbers of A.
 
 # coefficient ring (edit pStr; p is derived from it so the two stay in sync)
 pStr := "2^61-1";
@@ -21,7 +21,7 @@ t := 5*One(R);
 n := 4;
 
 # logfile name encodes (n, p, q, t)
-LogTo(Concatenation("../logs_and_traces/logfile_bmw_trunc","-", String(n), "-(", pStr, ")-",
+LogTo(Concatenation("logs_and_traces/logfile_bmw_trunc","-", String(n), "-(", pStr, ")-",
                     String(Int(q)), "-", String(Int(t)), ".txt"));
 
 

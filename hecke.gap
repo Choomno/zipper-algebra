@@ -1,4 +1,4 @@
-LogTo("../logs_and_traces/logfile_hecke.txt");
+LogTo("logs_and_traces/logfile_hecke.txt");
 LoadPackage("gbnp");
 SetInfoLevel(InfoGBNP, 2);
 SetInfoLevel(InfoGBNPTime,2);
