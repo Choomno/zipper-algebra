@@ -1,7 +1,9 @@
 #!/bin/bash
-# Fallback submission for the n=4 traced run if the batch-partition version
-# OOMs. Uses largemem (1 TB / node, 32-day max, 4 nodes shared cluster-wide).
-# Usage: sbatch zipper_n4_traced_largemem.sbatch
+# Fallback submission for the n=4 traced run on UCSB's pod cluster if the
+# batch-partition version (150G) OOMs. Uses largemem (1 TB / node, 4 nodes
+# cluster-wide).
+# Usage:
+#   sbatch --export=ALL,TRACED=true cluster/zipper_n4_traced_largemem.sbatch
 #
 #SBATCH --job-name=zipper_n4_traced
 #SBATCH --output=slurm-%x-%j.out
@@ -26,11 +28,14 @@ export PSTR=${PSTR:-2^31-1}
 export UNTWIST=${UNTWIST:-bigelow}
 export TRACED=${TRACED:-false}
 
-echo "Host:    $(hostname)"
-echo "Date:    $(date)"
-echo "PWD:     $(pwd)"
-echo "Params:  N=$N Q=$Q T=$T PSTR=$PSTR UNTWIST=$UNTWIST TRACED=$TRACED"
-echo "GAP:     $(which gap)"
+GAP_HEAP=${GAP_HEAP:-750G}
+
+echo "Host:     $(hostname)"
+echo "Date:     $(date)"
+echo "PWD:      $(pwd)"
+echo "Params:   N=$N Q=$Q T=$T PSTR=$PSTR UNTWIST=$UNTWIST TRACED=$TRACED"
+echo "GAP:      $(which gap)"
+echo "GAP_HEAP: $GAP_HEAP"
 echo "---"
 
-gap -o 750G -K 750G zipper.gap
+gap -o $GAP_HEAP -K $GAP_HEAP zipper.gap

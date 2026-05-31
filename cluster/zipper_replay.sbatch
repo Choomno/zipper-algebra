@@ -17,7 +17,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=46G
+#SBATCH --mem=150G
 #SBATCH --time=2-00:00:00
 #SBATCH --mail-type=END,FAIL
 #SBATCH --mail-user=YOUR_EMAIL@ucsb.edu
@@ -26,12 +26,15 @@ set -euo pipefail
 cd "$SLURM_SUBMIT_DIR"
 mkdir -p logs_and_traces
 
+GAP_HEAP=${GAP_HEAP:-140G}
+
 # ANCHOR_FILE is read by trace_replay.gap (with a sensible default if unset).
 echo "Host:        $(hostname)"
 echo "Date:        $(date)"
 echo "PWD:         $(pwd)"
 echo "ANCHOR_FILE: ${ANCHOR_FILE:-<default from trace_replay.gap>}"
 echo "GAP:         $(which gap)"
+echo "GAP_HEAP:    $GAP_HEAP"
 echo "---"
 
-gap -o 42G -K 42G trace_replay.gap
+gap -o $GAP_HEAP -K $GAP_HEAP trace_replay.gap

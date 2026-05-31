@@ -1,6 +1,8 @@
 # Cluster submission scripts
 
-Submission scripts for running the zipper-algebra pipeline on UCSB's knot cluster (SLURM).
+Submission scripts for running the zipper-algebra pipeline on UCSB's **pod** cluster (SLURM).
+
+Pod's regular batch nodes have 40 cores and 192 GB RAM each; largemem has 4 fat nodes with 1 TB RAM each.
 
 ## Workflow
 
@@ -9,11 +11,11 @@ Submission scripts for running the zipper-algebra pipeline on UCSB's knot cluste
 
 ## Files
 
-| File | Purpose |
-|---|---|
-| `zipper_n4_traced.sbatch` | Anchor SGrobnerTrace on `batch` (46 GB). First attempt. |
-| `zipper_n4_traced_largemem.sbatch` | Same, on `largemem` (800 GB). Fallback if `batch` OOMs. |
-| `zipper_replay.sbatch` | Runs `trace_replay.gap` against an anchor file. |
+| File | Partition | Memory | Purpose |
+|---|---|---:|---|
+| `zipper_n4_traced.sbatch` | batch | 150 G | Anchor SGrobnerTrace. Default first attempt. |
+| `zipper_n4_traced_largemem.sbatch` | largemem | 800 G | Same, on largemem (1 TB / node, 4 nodes). Fallback if batch OOMs. |
+| `zipper_replay.sbatch` | batch | 150 G | Runs `trace_replay.gap` against an anchor file. |
 
 ## Anchor run
 
@@ -21,11 +23,15 @@ Submission scripts for running the zipper-algebra pipeline on UCSB's knot cluste
 # Traced bigelow n=4 anchor at q=5, t=7, p=2^31-1 — the heavy job
 sbatch --export=ALL,TRACED=true cluster/zipper_n4_traced.sbatch
 
-# Override params
-sbatch --export=ALL,TRACED=true,N=4,Q=7,T=11 cluster/zipper_n4_traced.sbatch
+# Override params at submit time
+sbatch --export=ALL,N=4,Q=7,T=11,TRACED=true cluster/zipper_n4_traced.sbatch
+
+# Override memory (script reads GAP_HEAP for the gap workspace flag)
+sbatch --mem=180G --export=ALL,TRACED=true,GAP_HEAP=170G \
+       cluster/zipper_n4_traced.sbatch
 ```
 
-Default env values (when unset): `N=3, Q=5, T=7, PSTR=2^31-1, UNTWIST=bigelow, TRACED=false`. Explicitly setting `TRACED=true` is required for an anchor run.
+Default env values (when unset): `N=4, Q=5, T=7, PSTR=2^31-1, UNTWIST=bigelow, TRACED=false`. Explicitly setting `TRACED=true` is required for an anchor run.
 
 ## Replay sweep
 
@@ -48,6 +54,13 @@ tail -f logs_and_traces/logfile_zipper_bigelow-traced-4-\(2^31-1\)-5-7.txt
 scancel JOBID
 ```
 
+Pod-specific partition state:
+
+```bash
+sinfo -p batch    -h -o "%t %D" | sort | uniq -c
+sinfo -p largemem -h -o "%t %D" | sort | uniq -c
+```
+
 ## Before submitting
 
 1. Edit `--mail-user=YOUR_EMAIL@ucsb.edu` in each `.sbatch` (or delete the `mail-*` lines).
@@ -55,3 +68,8 @@ scancel JOBID
 3. Parameters consumed from environment:
    - `zipper.gap`: `N`, `Q`, `T`, `PSTR`, `UNTWIST`, `S`, `TRACED`
    - `trace_replay.gap`: `ANCHOR_FILE`
+   - SLURM scripts: `GAP_HEAP` for the gap workspace size
+
+## Cross-cluster note
+
+If you have access to knot as well, the GAP install on knot is visible on pod at `/csc/knot/home/$USER/gap-4.15.1` — you can copy or symlink it to avoid rebuilding. The submission scripts here assume the pod environment; for knot, drop the `--mem` to 46 G (batch) or 800 G (largemem) since knot's nodes are smaller.
