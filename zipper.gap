@@ -8,12 +8,20 @@ SetRecursionTrapInterval(50000);
 # USER PARAMETERS
 ###############################################################################
 #
-# Edit the values in this block, then run
-#   gap -o <workspace> -K <workspace> zipper.gap
-# from the braid-GAP/ directory.
-#
+# Each parameter reads from an environment variable. If the variable is unset
+# or empty, the fallback default below is used. Run with (e.g.):
+#   N=4 Q=5 T=7 UNTWIST=bigelow TRACED=true gap -o 42G -K 42G zipper.gap
+# Override only the values you want to change; the rest fall back to defaults.
+
+ReadParam := function(name, default_)
+  local v;
+  v := GetEnvironmentVariable(name);
+  if v = fail or v = "" then return default_; fi;
+  return v;
+end;
+
 # Number of strands.
-n := 4;
+n := Int(ReadParam("N", "3"));
 
 # The "true" coefficient ring is the function field Q(q,t), but rational
 # arithmetic is too expensive; specializing to GF(p) at chosen integer values is
@@ -22,9 +30,9 @@ n := 4;
 # The coefficient ring is GF(p) for the prime p below; q and t are the residue
 # classes of q_int and t_int. Run at multiple primes/parameters to validate, or
 # for lifting coefficients to Q(q,t).
-pStr := "2^31-1";
-q_int := 5;
-t_int := 7;
+pStr  :=     ReadParam("PSTR", "2^31-1");
+q_int := Int(ReadParam("Q",    "5"));
+t_int := Int(ReadParam("T",    "7"));
 
 # Type of untwisting relations to add. The value is one of:
 #   "bigelow"        - Bigelow's conjectured form: 2-strand (xs[j] - t)X_2,
@@ -37,16 +45,14 @@ t_int := 7;
 #                      is weakened to (xs[j]^2 - t^2)X_2 (eigenvalue +/- t).
 #   "none"           - Omit the untwisting relations entirely. Quotient may
 #                      potentially be infinite-dimensional in this case.
-untwisting_type := "bigelow";
-s_int := 11;
+untwisting_type :=     ReadParam("UNTWIST", "bigelow");
+s_int           := Int(ReadParam("S",       "11"));
 
-# Below is a parameter that determines whether to compute the full trace
-# (for instance, for the purpose of expressing each basis element as a linear
-# combination of the input relations) or just a bare Grobner basis.
-# Tracing is dramatically heavier in time, RAM, and disk. Set either:
-#   traced := true
-#   traced := false
-traced := true;
+# Whether to compute the full trace (express each basis element as a linear
+# combination of the input relations) or just a bare Grobner basis. Tracing
+# is dramatically heavier in time, RAM, and disk. Set TRACED=true / false
+# (case-sensitive).
+traced := (ReadParam("TRACED", "false") = "true");
 
 
 ###############################################################################
@@ -447,8 +453,7 @@ else
   B := SGrobner(I);
 fi;
 
-# NOTE: Add a human-readable print of the grobner basis here.
-Print("Groebner basis size: ", Length(B), "\n\n");
+Print("Grobner basis size: ", Length(B), "\n\n");
 
 # Save the result to a parameter-tagged file.
 outFile := Concatenation("logs_and_traces/grobner_zipper_",
