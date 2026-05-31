@@ -37,7 +37,7 @@ t_int := 7;
 #                      is weakened to (xs[j]^2 - t^2)X_2 (eigenvalue +/- t).
 #   "none"           - Omit the untwisting relations entirely. Quotient may
 #                      potentially be infinite-dimensional in this case.
-untwisting_type := "silly_question";
+untwisting_type := "bigelow";
 s_int := 11;
 
 # Below is a parameter that determines whether to compute the full trace
@@ -46,7 +46,7 @@ s_int := 11;
 # Tracing is dramatically heavier in time, RAM, and disk. Set either:
 #   traced := true
 #   traced := false
-traced := false;
+traced := true;
 
 
 ###############################################################################
