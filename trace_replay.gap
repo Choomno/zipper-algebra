@@ -23,8 +23,10 @@ SetRecursionTrapInterval(50000);
 # Path to the anchor saved-traced-basis file. Loading it brings into scope:
 #   n, pStr, p, R, q, t, I, GBT
 # Override via ANCHOR_FILE environment variable, or edit the default below.
-basisFile := GetEnvironmentVariable("ANCHOR_FILE");
-if basisFile = fail or basisFile = "" then
+if IsBound(GAPInfo.SystemEnvironment.ANCHOR_FILE)
+   and GAPInfo.SystemEnvironment.ANCHOR_FILE <> "" then
+  basisFile := GAPInfo.SystemEnvironment.ANCHOR_FILE;
+else
   basisFile := "logs_and_traces/grobner_zipper_bigelow-trace-3-(2^31-1)-5-7.gap";
 fi;
 

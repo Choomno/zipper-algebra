@@ -14,10 +14,11 @@ SetRecursionTrapInterval(50000);
 # Override only the values you want to change; the rest fall back to defaults.
 
 ReadParam := function(name, default_)
-  local v;
-  v := GetEnvironmentVariable(name);
-  if v = fail or v = "" then return default_; fi;
-  return v;
+  if IsBound(GAPInfo.SystemEnvironment.(name))
+     and GAPInfo.SystemEnvironment.(name) <> "" then
+    return GAPInfo.SystemEnvironment.(name);
+  fi;
+  return default_;
 end;
 
 # Number of strands.
