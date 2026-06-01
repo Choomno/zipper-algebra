@@ -14,7 +14,7 @@ Pod's regular batch nodes have 40 cores and 192 GB RAM each; largemem has 4 fat 
 | File | Partition | Memory | Purpose |
 |---|---|---:|---|
 | `zipper_n4_traced.sbatch` | batch | 150 G | Anchor SGrobnerTrace. Default first attempt. |
-| `zipper_n4_traced_largemem.sbatch` | largemem | 800 G | Same, on largemem (1 TB / node, 4 nodes). Fallback if batch OOMs. |
+| `zipper_n4_traced_largemem.sbatch` | largemem | 950 G | Same, on largemem (1 TB / node, 4 nodes). Fallback if batch OOMs. |
 | `zipper_replay.sbatch` | batch | 150 G | Runs `trace_replay.gap` against an anchor file. |
 
 ## Anchor run

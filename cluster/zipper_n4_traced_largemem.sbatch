@@ -12,7 +12,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=800G
+#SBATCH --mem=950G
 #SBATCH --time=14-00:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT_50,TIME_LIMIT_80
 #SBATCH --mail-user=YOUR_EMAIL@ucsb.edu
@@ -28,7 +28,7 @@ export PSTR=${PSTR:-2^31-1}
 export UNTWIST=${UNTWIST:-bigelow}
 export TRACED=${TRACED:-false}
 
-GAP_HEAP=${GAP_HEAP:-750G}
+GAP_HEAP=${GAP_HEAP:-900G}
 
 echo "Host:     $(hostname)"
 echo "Date:     $(date)"
