@@ -1,7 +1,7 @@
 #!/bin/bash
 # Fallback submission for the n=4 traced run on UCSB's pod cluster if the
-# batch-partition version (150G) OOMs. Uses largemem (1 TB / node, 4 nodes
-# cluster-wide).
+# batch-partition version (150G) OOMs. Uses largemem (4 nodes; ~710 GB
+# user-addressable per node despite being marketed as 1 TB).
 # Usage:
 #   sbatch --export=ALL,TRACED=true cluster/zipper_n4_traced_largemem.sbatch
 #
@@ -12,7 +12,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=950G
+#SBATCH --mem=700000M
 #SBATCH --time=14-00:00:00
 #SBATCH --mail-type=BEGIN,END,FAIL,TIME_LIMIT_50,TIME_LIMIT_80
 #SBATCH --mail-user=YOUR_EMAIL@ucsb.edu
@@ -28,7 +28,7 @@ export PSTR=${PSTR:-2^31-1}
 export UNTWIST=${UNTWIST:-bigelow}
 export TRACED=${TRACED:-false}
 
-GAP_HEAP=${GAP_HEAP:-900G}
+GAP_HEAP=${GAP_HEAP:-650G}
 
 echo "Host:     $(hostname)"
 echo "Date:     $(date)"
