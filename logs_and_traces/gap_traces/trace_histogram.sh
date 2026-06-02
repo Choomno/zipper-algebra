@@ -3,7 +3,7 @@
 #
 # Usage:  trace_histogram.sh path/to/grobner_trace_zipper-...gap
 #
-# Streams over the file once -- never loads it into memory -- and reports:
+# Streams over the file once and reports:
 #   * file size and basis size
 #   * trace-tuple usage histogram by input-relation index, with each I[k]
 #     labeled by what it actually is (matched to zipper.gap's input order)

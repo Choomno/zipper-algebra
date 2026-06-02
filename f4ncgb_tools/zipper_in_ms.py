@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Generate an f4ncgb input file (msolve format) mirroring zipper.gap's relations,
+Generate an f4ncgb input file (msolve format) for the zipper presentation
 specialized at chosen integer (q, t) over either Q (characteristic 0) or GF(p).
 
 Usage:
@@ -12,10 +12,6 @@ Usage:
 
 The resulting .ms file feeds directly into f4ncgb:
     f4ncgb -p -o basis.txt zipper-3-...ms      # -p enables cofactor proof
-
-This script intentionally mirrors the build_relations function in zipper.gap so
-the algebra is identical -- if zipper.gap gives DimQA = 15 at n=3 bigelow, so
-should f4ncgb's output of the same relations.
 """
 
 from __future__ import annotations

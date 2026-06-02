@@ -1,13 +1,13 @@
 # Cluster submission scripts
 
-Submission scripts for running the zipper-algebra pipeline on UCSB's **pod** cluster (SLURM).
+Submission scripts for running the zipper algebra GAP script on UCSB's Pod cluster (SLURM).
 
 Pod's regular batch nodes have 40 cores and 192 GB RAM each; largemem has 4 fat nodes with 1 TB RAM each.
 
 ## Workflow
 
-1. **Anchor run** — one expensive `SGrobnerTrace` at a chosen (Q, T, PSTR) point. Produces a saved traced basis file.
-2. **Replay sweep** — one cheap job that runs `trace_replay.gap`, which iterates internally over its `samples` list (linear-solve replays using the anchor's trace structure). The `samples` list inside `trace_replay.gap` is the one place to edit when adding evaluation points.
+1. **Traced run** — one `SGrobnerTrace` at a chosen (Q, T, PSTR) point. Produces a saved traced basis file.
+2. **Trace replay** —  runs `trace_replay.gap`, which iterates internally over its `samples` list (linear-solve replays using the trace structure). The `samples` list inside `trace_replay.gap` is the one place to edit when adding evaluation points.
 
 ## Files
 
@@ -17,7 +17,7 @@ Pod's regular batch nodes have 40 cores and 192 GB RAM each; largemem has 4 fat 
 | `zipper_n4_traced_largemem.sbatch` | largemem | 700000 M | Same, on largemem (4 nodes; ~710 GB user-addressable, marketed as 1 TB). Fallback if batch OOMs. |
 | `zipper_replay.sbatch` | batch | 150 G | Runs `trace_replay.gap` against an anchor file. |
 
-## Anchor run
+## Traced run
 
 ```bash
 # Traced bigelow n=4 anchor at q=5, t=7, p=2^31-1 — the heavy job
@@ -33,7 +33,7 @@ sbatch --mem=180G --export=ALL,TRACED=true,GAP_HEAP=170G \
 
 Default env values (when unset): `N=4, Q=5, T=7, PSTR=2^31-1, UNTWIST=bigelow, TRACED=false`. Explicitly setting `TRACED=true` is required for an anchor run.
 
-## Replay sweep
+## Trace replay
 
 Edit `samples` inside `../trace_replay.gap` to add/remove evaluation points, commit, then:
 
@@ -69,7 +69,3 @@ sinfo -p largemem -h -o "%t %D" | sort | uniq -c
    - `zipper.gap`: `N`, `Q`, `T`, `PSTR`, `UNTWIST`, `S`, `TRACED`
    - `trace_replay.gap`: `ANCHOR_FILE`
    - SLURM scripts: `GAP_HEAP` for the gap workspace size
-
-## Cross-cluster note
-
-If you have access to knot as well, the GAP install on knot is visible on pod at `/csc/knot/home/$USER/gap-4.15.1` — you can copy or symlink it to avoid rebuilding. The submission scripts here assume the pod environment; for knot, drop the `--mem` to 46 G (batch) or 800 G (largemem) since knot's nodes are smaller.
