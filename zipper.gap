@@ -89,7 +89,7 @@ else
 fi;
 
 # logfile name encodes (mode, untwisting_type, n, p, params_str)
-LogTo(Concatenation("logs_and_traces/logfile_zipper_", untwisting_type, "-",
+LogTo(Concatenation("logs_and_traces/gap_traces/logfile_zipper_", untwisting_type, "-",
                     mode_str, "-", String(n), "-(", pStr, ")-", params_str,
                     ".txt"));
 
@@ -457,7 +457,7 @@ fi;
 Print("Grobner basis size: ", Length(B), "\n\n");
 
 # Save the result to a parameter-tagged file.
-outFile := Concatenation("logs_and_traces/grobner_zipper_",
+outFile := Concatenation("logs_and_traces/gap_traces/grobner_zipper_",
                           untwisting_type, "-", out_str, "-",
                           String(n), "-(", pStr, ")-",
                           params_str, ".gap");

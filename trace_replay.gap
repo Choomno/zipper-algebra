@@ -27,7 +27,7 @@ if IsBound(GAPInfo.SystemEnvironment.ANCHOR_FILE)
    and GAPInfo.SystemEnvironment.ANCHOR_FILE <> "" then
   basisFile := GAPInfo.SystemEnvironment.ANCHOR_FILE;
 else
-  basisFile := "logs_and_traces/grobner_zipper_bigelow-trace-3-(2^31-1)-5-7.gap";
+  basisFile := "logs_and_traces/gap_traces/grobner_zipper_bigelow-trace-3-(2^31-1)-5-7.gap";
 fi;
 
 # Sample parameter points at which to replay the trace. Each entry is
@@ -67,7 +67,7 @@ Print("  n=", n, ", |GBT|=", Length(GBT),
       ", GF(", pStr, "), q=", Int(q), ", t=", Int(t), "\n");
 
 # Log everything that follows to a parameter-tagged logfile.
-LogTo(Concatenation("logs_and_traces/logfile_replay-",
+LogTo(Concatenation("logs_and_traces/gap_traces/logfile_replay-",
                     String(n), "-(", pStr, ")-",
                     String(Int(q)), "-", String(Int(t)), ".txt"));
 
@@ -372,7 +372,7 @@ od;
 #                             one entry per sample
 # Loading this file plus rebuilding I via BuildInputsAndTarget is sufficient
 # for downstream CRT/interpolation work.
-dataFile := Concatenation("logs_and_traces/replay_data-", replay_mode, "-",
+dataFile := Concatenation("logs_and_traces/gap_traces/replay_data-", replay_mode, "-",
                           String(n), "-(", pStr, ")-",
                           String(Int(q)), "-", String(Int(t)), ".gap");
 PrintTo(dataFile,
